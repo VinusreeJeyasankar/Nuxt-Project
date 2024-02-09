@@ -13,4 +13,15 @@ export default defineNuxtConfig({
       mode: 'out-in'
     },
   },
+  modules: [
+    [
+      '@pinia/nuxt',
+      {
+        autoImports: ['defineStore', 'acceptHMRUpdate'],
+      },
+    ],
+  ],
+  imports: {
+    dirs: ['stores']
+  }
 })
