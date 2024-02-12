@@ -7,12 +7,22 @@ export default defineNuxtConfig({
         { name: 'viewport', content: 'width=device-width, initial-scale=1' }
       ],
       title : 'Nuxt-js Project',
+      script: [
+        { src: 'https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js' }
+      ],
+      link: [
+        { rel: "stylesheet", href: "https://fonts.googleapis.com/icon?family=Material+Icons" }
+      ]
     },
     pageTransition: {
       name: 'page',
       mode: 'out-in'
     },
   },
+  css: [
+    'bootstrap/dist/css/bootstrap.css',
+    '~/assets/scss/custom.scss'
+  ],
   modules: [
     [
       '@pinia/nuxt',
