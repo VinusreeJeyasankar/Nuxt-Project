@@ -1,4 +1,5 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
+import { defineNuxtConfig } from "nuxt/config"
 export default defineNuxtConfig({
   devtools: { enabled: true },
   app: {
@@ -21,9 +22,11 @@ export default defineNuxtConfig({
   },
   css: [
     'bootstrap/dist/css/bootstrap.css',
-    '~/assets/scss/custom.scss'
+    'bootstrap-vue/dist/bootstrap-vue.css'
   ],
   modules: [
+    'nuxt-vue3-google-signin',
+    // 'vue3-google-signin',
     [
       '@pinia/nuxt',
       {
@@ -31,7 +34,13 @@ export default defineNuxtConfig({
       },
     ],
   ],
+  runtimeConfig: {
+    googleClientId: process.env.GOOGLE_CLIENT_ID,
+  },
+  googleSignIn: {
+    clientId: process.env.GOOGLE_CLIENT_ID,
+  },
   imports: {
     dirs: ['stores']
-  }
+  },
 })
