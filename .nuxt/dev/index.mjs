@@ -3,10 +3,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { mkdirSync } from 'node:fs';
 import { parentPort, threadId } from 'node:worker_threads';
-import { defineEventHandler, handleCacheHeaders, splitCookiesString, isEvent, createEvent, getRequestHeader, eventHandler, setHeaders, sendRedirect, proxyRequest, setResponseHeader, send, getResponseStatus, setResponseStatus, setResponseHeaders, getRequestHeaders, createApp, createRouter as createRouter$1, toNodeListener, fetchWithEvent, lazyEventHandler, setCookie, appendHeader, parseCookies, getHeaders, getMethod, getQuery as getQuery$1, createError, isMethod, readBody, getResponseStatusText } from 'file:///home/st/Nuxt-Project/node_modules/h3/dist/index.mjs';
-import GithubProvider from 'file:///home/st/Nuxt-Project/node_modules/next-auth/providers/github.js';
-import { AuthHandler } from 'file:///home/st/Nuxt-Project/node_modules/next-auth/core/index.js';
-import defu, { defuFn, defu as defu$1 } from 'file:///home/st/Nuxt-Project/node_modules/defu/dist/defu.mjs';
+import { defineEventHandler, handleCacheHeaders, splitCookiesString, isEvent, createEvent, getRequestHeader, eventHandler, setHeaders, sendRedirect, proxyRequest, setResponseHeader, send, getResponseStatus, setResponseStatus, setResponseHeaders, getRequestHeaders, createApp, createRouter as createRouter$1, toNodeListener, fetchWithEvent, lazyEventHandler, getQuery as getQuery$1, createError, getResponseStatusText } from 'file:///home/st/Nuxt-Project/node_modules/h3/dist/index.mjs';
 import { getRequestDependencies, getPreloadLinks, getPrefetchLinks, createRenderer } from 'file:///home/st/Nuxt-Project/node_modules/vue-bundle-renderer/dist/runtime.mjs';
 import { stringify, uneval } from 'file:///home/st/Nuxt-Project/node_modules/devalue/index.js';
 import { renderToString } from 'file:///home/st/Nuxt-Project/node_modules/vue/server-renderer/index.mjs';
@@ -17,6 +14,7 @@ import { createCall, createFetch } from 'file:///home/st/Nuxt-Project/node_modul
 import { createHooks } from 'file:///home/st/Nuxt-Project/node_modules/hookable/dist/index.mjs';
 import { snakeCase } from 'file:///home/st/Nuxt-Project/node_modules/scule/dist/index.mjs';
 import { klona } from 'file:///home/st/Nuxt-Project/node_modules/klona/dist/index.mjs';
+import defu, { defuFn } from 'file:///home/st/Nuxt-Project/node_modules/defu/dist/defu.mjs';
 import { hash } from 'file:///home/st/Nuxt-Project/node_modules/ohash/dist/index.mjs';
 import { parseURL, withoutBase, joinURL, getQuery, withQuery } from 'file:///home/st/Nuxt-Project/node_modules/ufo/dist/index.mjs';
 import { createStorage, prefixStorage } from 'file:///home/st/Nuxt-Project/node_modules/unstorage/dist/index.mjs';
@@ -613,9 +611,6 @@ const ERROR_MESSAGES = {
 };
 
 const isProduction = "development" === "production";
-const useTypedBackendConfig = (runtimeConfig, _type) => {
-  return runtimeConfig.public.auth.provider;
-};
 
 function defineRenderHandler(handler) {
   return eventHandler(async (event) => {
@@ -672,21 +667,6 @@ const getServerOrigin = (event) => {
     return getURL(event.node.req, false);
   }
   throw new Error(ERROR_MESSAGES.NO_ORIGIN);
-};
-const getRequestURLFromRequest = (event, { trustHost }) => {
-  if (trustHost) {
-    const forwardedValue = getURL(event.node.req);
-    if (forwardedValue) {
-      return Array.isArray(forwardedValue) ? forwardedValue[0] : forwardedValue;
-    }
-  }
-  let origin;
-  try {
-    origin = getServerOrigin(event);
-  } catch (error) {
-    return void 0;
-  }
-  return joinURL(origin, useRuntimeConfig().public.auth.computed.pathname);
 };
 
 function defineNitroPlugin(def) {
@@ -767,11 +747,13 @@ const errorHandler = (async function errorhandler(error, event) {
   return send(event, html);
 });
 
-const _lazy_xgtipB = () => Promise.resolve().then(function () { return _____$1; });
+const _lazy_xgtipB = () => Promise.resolve().then(function () { return _____; });
+const _lazy_ZAUzLX = () => Promise.resolve().then(function () { return googleLogin_post; });
 const _lazy_S2Ft8E = () => Promise.resolve().then(function () { return renderer$1; });
 
 const handlers = [
   { route: '/api/auth/**', handler: _lazy_xgtipB, lazy: true, middleware: false, method: undefined },
+  { route: '/api/google-login', handler: _lazy_ZAUzLX, lazy: true, middleware: false, method: "post" },
   { route: '/__nuxt_error', handler: _lazy_S2Ft8E, lazy: true, middleware: false, method: undefined },
   { route: '/**', handler: _lazy_S2Ft8E, lazy: true, middleware: false, method: undefined }
 ];
@@ -957,117 +939,12 @@ const errorDev = /*#__PURE__*/Object.freeze({
   template: template$1
 });
 
-let preparedAuthHandler;
-let usedSecret;
-const SUPPORTED_ACTIONS = ["providers", "session", "csrf", "signin", "signout", "callback", "verify-request", "error", "_log"];
-const useConfig = () => useTypedBackendConfig(useRuntimeConfig());
-const readBodyForNext = async (event) => {
-  let body;
-  if (isMethod(event, "PATCH") || isMethod(event, "POST") || isMethod(event, "PUT") || isMethod(event, "DELETE")) {
-    body = await readBody(event);
-  }
-  return body;
-};
-const parseActionAndProvider = ({ context }) => {
-  const params = context.params?._?.split("/");
-  if (!params || ![1, 2].includes(params.length)) {
-    throw createError({ statusCode: 400, statusMessage: `Invalid path used for auth-endpoint. Supply either one path parameter (e.g., \`/api/auth/session\`) or two (e.g., \`/api/auth/signin/github\` after the base path (in previous examples base path was: \`/api/auth/\`. Received \`${params}\`` });
-  }
-  const [unvalidatedAction, providerId] = params;
-  const action = SUPPORTED_ACTIONS.find((action2) => action2 === unvalidatedAction);
-  if (!action) {
-    throw createError({ statusCode: 400, statusMessage: `Called endpoint with unsupported action ${unvalidatedAction}. Only the following actions are supported: ${SUPPORTED_ACTIONS.join(", ")}` });
-  }
-  return { action, providerId };
-};
-const NuxtAuthHandler = (nuxtAuthOptions) => {
-  usedSecret = nuxtAuthOptions?.secret;
-  if (!usedSecret) {
-    {
-      console.info(ERROR_MESSAGES.NO_SECRET);
-      usedSecret = "secret";
-    }
-  }
-  const options = defu$1(nuxtAuthOptions, {
-    secret: usedSecret,
-    logger: void 0,
-    providers: [],
-    trustHost: useConfig().trustHost
-  });
-  const getInternalNextAuthRequestData = async (event) => {
-    const nextRequest = {
-      host: getRequestURLFromRequest(event, { trustHost: useConfig().trustHost }),
-      body: void 0,
-      cookies: parseCookies(event),
-      query: void 0,
-      headers: getHeaders(event),
-      method: getMethod(event),
-      providerId: void 0,
-      error: void 0
-    };
-    if (event.context.checkSessionOnNonAuthRequest === true) {
-      return {
-        ...nextRequest,
-        method: "GET",
-        action: "session"
-      };
-    }
-    const query = getQuery$1(event);
-    const { action, providerId } = parseActionAndProvider(event);
-    const error = query.error;
-    if (Array.isArray(error)) {
-      throw createError({ statusCode: 400, statusMessage: "Error query parameter can only appear once" });
-    }
-    const body = await readBodyForNext(event);
-    return {
-      ...nextRequest,
-      body,
-      query,
-      action,
-      providerId,
-      error: String(error) || void 0
-    };
-  };
-  const handler = eventHandler(async (event) => {
-    const { res } = event.node;
-    const nextRequest = await getInternalNextAuthRequestData(event);
-    const nextResult = await AuthHandler({
-      req: nextRequest,
-      options
-    });
-    if (nextResult.status) {
-      res.statusCode = nextResult.status;
-    }
-    nextResult.cookies?.forEach((cookie) => setCookie(event, cookie.name, cookie.value, cookie.options));
-    nextResult.headers?.forEach((header) => appendHeader(event, header.key, header.value));
-    if (!nextResult.redirect) {
-      return nextResult.body;
-    }
-    if (nextRequest.body?.json) {
-      return { url: nextResult.redirect };
-    }
-    return sendRedirect(event, nextResult.redirect);
-  });
-  if (preparedAuthHandler) {
-    console.warn("You setup the auth handler for a second time - this is likely undesired. Make sure that you only call `NuxtAuthHandler( ... )` once");
-  }
-  preparedAuthHandler = handler;
-  return handler;
-};
-
-const _____ = NuxtAuthHandler({
-  providers: [
-    // @ts-expect-error You need to use .default here for it to work during SSR. May be fixed via Vite at some point
-    GithubProvider.default({
-      clientId: "enter-your-client-id-here",
-      clientSecret: "enter-your-client-secret-here"
-    })
-  ]
+const _____ = /*#__PURE__*/Object.freeze({
+  __proto__: null
 });
 
-const _____$1 = /*#__PURE__*/Object.freeze({
-  __proto__: null,
-  default: _____
+const googleLogin_post = /*#__PURE__*/Object.freeze({
+  __proto__: null
 });
 
 const Vue3 = version.startsWith("3");
