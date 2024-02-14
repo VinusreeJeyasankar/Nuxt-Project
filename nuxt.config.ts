@@ -26,6 +26,7 @@ export default defineNuxtConfig({
   ],
   modules: [
     'nuxt-vue3-google-signin',
+    // '@sidebase/nuxt-auth',
     // 'vue3-google-signin',
     [
       '@pinia/nuxt',
@@ -34,6 +35,11 @@ export default defineNuxtConfig({
       },
     ],
   ],
+  // auth: {
+  //   provider: {
+  //     type: 'authjs'
+  //   },
+  // },
   runtimeConfig: {
     googleClientId: process.env.GOOGLE_CLIENT_ID,
   },

@@ -19,6 +19,7 @@
     "defu": "^6.1.4",
     "google-auth-library": "^9.6.3",
     "jsonwebtoken": "^9.0.2",
+    "next-auth": "^4.24.5",
     "nuxt": "^3.10.1",
     "nuxt-vue3-google-signin": "^0.0.10",
     "pinia": "^2.1.7",
@@ -28,6 +29,7 @@
     "vuex": "^4.1.0"
   },
   "devDependencies": {
+    "@sidebase/nuxt-auth": "^0.6.7",
     "sass": "^1.70.0"
   }
 }

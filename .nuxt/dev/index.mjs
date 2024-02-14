@@ -20,7 +20,6 @@ import { parseURL, withoutBase, joinURL, getQuery, withQuery } from 'file:///hom
 import { createStorage, prefixStorage } from 'file:///home/st/Nuxt-Project/node_modules/unstorage/dist/index.mjs';
 import unstorage_47drivers_47fs from 'file:///home/st/Nuxt-Project/node_modules/unstorage/drivers/fs.mjs';
 import { toRouteMatcher, createRouter } from 'file:///home/st/Nuxt-Project/node_modules/radix3/dist/index.mjs';
-import getURL from 'file:///home/st/Nuxt-Project/node_modules/requrl/dist/requrl.js';
 import { version, unref } from 'file:///home/st/Nuxt-Project/node_modules/vue/index.mjs';
 import { createServerHead as createServerHead$1 } from 'file:///home/st/Nuxt-Project/node_modules/unhead/dist/index.mjs';
 import { defineHeadPlugin } from 'file:///home/st/Nuxt-Project/node_modules/@unhead/shared/dist/index.mjs';
@@ -64,29 +63,6 @@ const _inlineRuntimeConfig = {
   "public": {
     "googleSignIn": {
       "clientId": "366425356732-dr3chcervgn83h5j8oa7dlbc7slvsa8r.apps.googleusercontent.com"
-    },
-    "auth": {
-      "computed": {
-        "origin": "",
-        "pathname": "/api/auth",
-        "fullBaseUrl": "/api/auth"
-      },
-      "isEnabled": true,
-      "session": {
-        "enableRefreshPeriodically": false,
-        "enableRefreshOnWindowFocus": true
-      },
-      "globalAppMiddleware": {
-        "isEnabled": false,
-        "allow404WithoutAuth": true,
-        "addDefaultCallbackUrl": true
-      },
-      "provider": {
-        "type": "authjs",
-        "trustHost": false,
-        "defaultProvider": "",
-        "addDefaultCallbackUrl": true
-      }
     }
   },
   "googleClientId": "366425356732-dr3chcervgn83h5j8oa7dlbc7slvsa8r.apps.googleusercontent.com"
@@ -605,12 +581,9 @@ const _FWRQAIIaG6 = (function(nitro) {
   });
 });
 
-const ERROR_MESSAGES = {
-  NO_SECRET: "AUTH_NO_SECRET: No `secret` - this is an error in production, see https://sidebase.io/nuxt-auth/resources/errors. You can ignore this during development",
-  NO_ORIGIN: "AUTH_NO_ORIGIN: No `origin` - this is an error in production, see https://sidebase.io/nuxt-auth/resources/errors. You can ignore this during development"
-};
-
-const isProduction = "development" === "production";
+const plugins = [
+  _FWRQAIIaG6
+];
 
 function defineRenderHandler(handler) {
   return eventHandler(async (event) => {
@@ -641,51 +614,6 @@ function defineRenderHandler(handler) {
     return response.body;
   });
 }
-
-function buildAssetsDir() {
-  return useRuntimeConfig().app.buildAssetsDir;
-}
-function buildAssetsURL(...path) {
-  return joinURL(publicAssetsURL(), buildAssetsDir(), ...path);
-}
-function publicAssetsURL(...path) {
-  const app = useRuntimeConfig().app;
-  const publicBase = app.cdnURL || app.baseURL;
-  return path.length ? joinURL(publicBase, ...path) : publicBase;
-}
-
-const getServerOrigin = (event) => {
-  const envOrigin = process.env.AUTH_ORIGIN;
-  if (envOrigin) {
-    return envOrigin;
-  }
-  const runtimeConfigOrigin = useRuntimeConfig().public.auth.computed.origin;
-  if (runtimeConfigOrigin) {
-    return runtimeConfigOrigin;
-  }
-  if (event && !isProduction) {
-    return getURL(event.node.req, false);
-  }
-  throw new Error(ERROR_MESSAGES.NO_ORIGIN);
-};
-
-function defineNitroPlugin(def) {
-  return def;
-}
-const _rgd8W6nXvA = defineNitroPlugin(() => {
-  try {
-    getServerOrigin();
-  } catch (error) {
-    {
-      console.info(ERROR_MESSAGES.NO_ORIGIN);
-    }
-  }
-});
-
-const plugins = [
-  _FWRQAIIaG6,
-_rgd8W6nXvA
-];
 
 const errorHandler = (async function errorhandler(error, event) {
   const { stack, statusCode, statusMessage, message } = normalizeError(error);
@@ -1008,6 +936,18 @@ const appHead = {"meta":[{"charset":"utf-8"},{"name":"viewport","content":"width
 const appRootId = "__nuxt";
 
 const appRootTag = "div";
+
+function buildAssetsDir() {
+  return useRuntimeConfig().app.buildAssetsDir;
+}
+function buildAssetsURL(...path) {
+  return joinURL(publicAssetsURL(), buildAssetsDir(), ...path);
+}
+function publicAssetsURL(...path) {
+  const app = useRuntimeConfig().app;
+  const publicBase = app.cdnURL || app.baseURL;
+  return path.length ? joinURL(publicBase, ...path) : publicBase;
+}
 
 globalThis.__buildAssetsURL = buildAssetsURL;
 globalThis.__publicAssetsURL = publicAssetsURL;

@@ -56,19 +56,12 @@
       ],
       "pinia": [
         "../node_modules/pinia/dist/pinia"
-      ],
-      "#auth": [
-        "../node_modules/@sidebase/nuxt-auth/dist/runtime/server/services"
-      ],
-      "#auth/*": [
-        "../node_modules/@sidebase/nuxt-auth/dist/runtime/server/services/*"
       ]
     }
   },
   "include": [
     "./types/nitro-nuxt.d.ts",
     "../node_modules/nuxt-vue3-google-signin/runtime/server",
-    "../node_modules/@sidebase/nuxt-auth/runtime/server",
     "../node_modules/@pinia/nuxt/runtime/server",
     "../node_modules/@nuxt/devtools/runtime/server",
     "../node_modules/@nuxt/telemetry/runtime/server",

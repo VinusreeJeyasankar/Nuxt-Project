@@ -101,8 +101,6 @@ declare global {
   const useAppConfig: typeof import('../../node_modules/nuxt/dist/app/config')['useAppConfig']
   const useAsyncData: typeof import('../../node_modules/nuxt/dist/app/composables/asyncData')['useAsyncData']
   const useAttrs: typeof import('../../node_modules/vue')['useAttrs']
-  const useAuth: typeof import('../../node_modules/@sidebase/nuxt-auth/dist/runtime/composables/authjs/useAuth')['useAuth']
-  const useAuthState: typeof import('../../node_modules/@sidebase/nuxt-auth/dist/runtime/composables/authjs/useAuthState')['useAuthState']
   const useCodeClient: typeof import('../../node_modules/vue3-google-signin')['useCodeClient']
   const useCookie: typeof import('../../node_modules/nuxt/dist/app/composables/cookie')['useCookie']
   const useCssModule: typeof import('../../node_modules/vue')['useCssModule']
@@ -261,8 +259,6 @@ declare module 'vue' {
     readonly useAppConfig: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/config')['useAppConfig']>
     readonly useAsyncData: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/composables/asyncData')['useAsyncData']>
     readonly useAttrs: UnwrapRef<typeof import('../../node_modules/vue')['useAttrs']>
-    readonly useAuth: UnwrapRef<typeof import('../../node_modules/@sidebase/nuxt-auth/dist/runtime/composables/authjs/useAuth')['useAuth']>
-    readonly useAuthState: UnwrapRef<typeof import('../../node_modules/@sidebase/nuxt-auth/dist/runtime/composables/authjs/useAuthState')['useAuthState']>
     readonly useCodeClient: UnwrapRef<typeof import('../../node_modules/vue3-google-signin')['useCodeClient']>
     readonly useCookie: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/composables/cookie')['useCookie']>
     readonly useCssModule: UnwrapRef<typeof import('../../node_modules/vue')['useCssModule']>
@@ -414,8 +410,6 @@ declare module '@vue/runtime-core' {
     readonly useAppConfig: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/config')['useAppConfig']>
     readonly useAsyncData: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/composables/asyncData')['useAsyncData']>
     readonly useAttrs: UnwrapRef<typeof import('../../node_modules/vue')['useAttrs']>
-    readonly useAuth: UnwrapRef<typeof import('../../node_modules/@sidebase/nuxt-auth/dist/runtime/composables/authjs/useAuth')['useAuth']>
-    readonly useAuthState: UnwrapRef<typeof import('../../node_modules/@sidebase/nuxt-auth/dist/runtime/composables/authjs/useAuthState')['useAuthState']>
     readonly useCodeClient: UnwrapRef<typeof import('../../node_modules/vue3-google-signin')['useCodeClient']>
     readonly useCookie: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/composables/cookie')['useCookie']>
     readonly useCssModule: UnwrapRef<typeof import('../../node_modules/vue')['useCssModule']>
